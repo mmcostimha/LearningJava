@@ -85,9 +85,6 @@ public class Main {
         double secund = scanner.nextDouble();
         scanner.nextLine();
 
-//        System.out.println("Power = " + Math.pow(fisrt,secund));
-//        System.out.println("Absulut valeu of negative first_number = " + Math.abs(-fisrt));
-//        System.out.println("Sqrt of first_number = " + Math.sqrt(fisrt));
         System.out.println("Hypotenuse - C1=first_number and C2=second numebr = " + Math.sqrt(Math.pow(fisrt, 2) + Math.pow(secund,2)));
         scanner.nextLine();
 
@@ -137,7 +134,7 @@ public class Main {
         int playerChoice;
         int botChoice;
         boolean playAgain = true;
-        String result = new String();
+        String result = "";
 
         //Create a matching matrix (player;bot)
         //-----------------------------------------
