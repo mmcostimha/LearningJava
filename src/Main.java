@@ -18,6 +18,8 @@ public class Main {
             System.out.println("3 - Hypotenuse (Math)");
             System.out.println("4 - Compound interest calculator(Math)");
             System.out.println("5 - Pass or Fail(Ternary operator)");
+            System.out.println("6 - Rock Paper Scissors (1D and 2D Arrays)");
+            System.out.println("...");
             System.out.println("...");
             System.out.println("9 - Leave");
             opcion = scanner.nextInt();
@@ -33,6 +35,8 @@ public class Main {
                     CompoundInterest(scanner);
                 case 5->
                     PassFail(scanner);
+                case 6 ->
+                    RockPaperScissors(scanner);
                 case 9->
                     System.out.println("Bye");
                 default->
@@ -126,4 +130,59 @@ public class Main {
         scanner.nextLine();
     }
 
+    private static  void RockPaperScissors(Scanner scanner){
+
+        Random random = new Random();
+        String[] choices = {"Rock","Paper","Scissors"};
+        int playerChoice;
+        int botChoice;
+        boolean playAgain = true;
+        String result = new String();
+
+        //Create a matching matrix (player;bot)
+        //-----------------------------------------
+        //  P\B       "Rock"  "Paper"  "Scissors"
+        //"Rock"        D       L        W
+        //
+        //"Paper"       W       D        L
+        //
+        //"Scissors"    L       W        D
+        //-----------------------------------------
+        Character[][] responseTable = {
+                {'D','L','W'},
+                {'W','D','L'},
+                {'L','W','D'}
+        };
+
+        while (playAgain){
+            int i=0;
+            // Ask for player response
+            System.out.println("Insert your choice");
+            for(;i < choices.length; i++)
+                System.out.println((i+1) + " - " + choices[i]);
+
+            playerChoice = scanner.nextInt();
+
+            // Generate a Bot response
+            botChoice = random.nextInt(0,3);
+
+            //Calculate the result
+            switch (responseTable[playerChoice-1][botChoice]){
+                case 'D'-> result = "Draw";
+                case 'L'->{
+                    playAgain=false;
+                    result = "You Lose";
+                }
+                case 'W'->{
+                    playAgain=false;
+                    result = "You Win";
+                }
+            }
+            System.out.printf("%s(you) VS %s(bot)\n",choices[playerChoice],choices[botChoice]);
+
+            System.out.println(result);
+        }
+        System.out.println("Nice Game!!!");
+        scanner.nextLine();
+    }
 }
