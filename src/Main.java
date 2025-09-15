@@ -1,7 +1,10 @@
 
 import java.awt.*;
+import java.io.*;
 import java.util.Scanner;
 import java.util.Random;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class Main {
 
@@ -19,8 +22,8 @@ public class Main {
             System.out.println("4 - Compound interest calculator(Math)");
             System.out.println("5 - Pass or Fail(Ternary operator)");
             System.out.println("6 - Rock Paper Scissors (1D and 2D Arrays)");
-            System.out.println("...");
-            System.out.println("...");
+            System.out.println("7 - (Classes, Interface and ArrayList)");
+            System.out.println("8 - (Write and Read a file, try, catch and finally)");
             System.out.println("9 - Leave");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -37,6 +40,8 @@ public class Main {
                     PassFail(scanner);
                 case 6 ->
                     RockPaperScissors(scanner);
+                case 8 ->
+                    Files(scanner);
                 case 9->
                     System.out.println("Bye");
                 default->
@@ -180,6 +185,40 @@ public class Main {
             System.out.println(result);
         }
         System.out.println("Nice Game!!!");
+        scanner.nextLine();
+    }
+
+    private static  void Files(Scanner scanner){
+
+        //How to write a file using JAVA (4 popular options)
+        System.out.println("What you want to write?");
+        String text = scanner.nextLine();
+
+        try(FileWriter writer = new FileWriter("test.txt")){
+            writer.write(text);
+
+            System.out.println("File was been written");
+
+        }
+        catch (IOException e){
+
+            System.out.println("Something went rong");
+        }
+
+
+        System.out.println("See all the info saved:");
+        try(BufferedReader reader = new BufferedReader(new FileReader("test.txt"))){
+
+            String line;
+            while ((line = reader.readLine()) != null){
+                System.out.println(line);
+            }
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         scanner.nextLine();
     }
 }
