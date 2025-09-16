@@ -1,6 +1,6 @@
 
-import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 import java.io.FileReader;
@@ -10,9 +10,9 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("I'm alive!!!");
-        int opcion = 0;
+        int option = 0;
         Scanner scanner = new Scanner(System.in);
-        while (9 != opcion){
+        while (9 != option){
 
             //----Menu-----
             System.out.println("Make your choice:");
@@ -22,12 +22,12 @@ public class Main {
             System.out.println("4 - Compound interest calculator(Math)");
             System.out.println("5 - Pass or Fail(Ternary operator)");
             System.out.println("6 - Rock Paper Scissors (1D and 2D Arrays)");
-            System.out.println("7 - (Classes, Interface and ArrayList)");
-            System.out.println("8 - (Write and Read a file, try, catch and finally)");
+            System.out.println("7 - Write and Read File (Write and Read a file, try, catch and finally)");
+            System.out.println("8 - Discography (Classes, Interface and ArrayList)");
             System.out.println("9 - Leave");
-            opcion = scanner.nextInt();
+            option = scanner.nextInt();
             scanner.nextLine();
-            switch (opcion){
+            switch (option){
                 case 1->
                     Hello(scanner);
                 case 2->
@@ -40,12 +40,14 @@ public class Main {
                     PassFail(scanner);
                 case 6 ->
                     RockPaperScissors(scanner);
-                case 8 ->
+                case 7 ->
                     Files(scanner);
+                case 8 ->
+                    Discography(scanner);
                 case 9->
                     System.out.println("Bye");
                 default->
-                    System.out.println("Unexpected value: " + opcion);
+                    System.out.println("Unexpected value: " + option);
             }
         }
        scanner.close();
@@ -83,14 +85,14 @@ public class Main {
         System.out.println("See Math interactions ");
 
         System.out.println("First number: ");
-        double fisrt = scanner.nextDouble();
+        double first = scanner.nextDouble();
         scanner.nextLine();
 
         System.out.println("Secund number: ");
         double secund = scanner.nextDouble();
         scanner.nextLine();
 
-        System.out.println("Hypotenuse - C1=first_number and C2=second numebr = " + Math.sqrt(Math.pow(fisrt, 2) + Math.pow(secund,2)));
+        System.out.println("Hypotenuse - C1=first_number and C2=second number = " + Math.sqrt(Math.pow(first, 2) + Math.pow(secund,2)));
         scanner.nextLine();
 
     }
@@ -122,12 +124,12 @@ public class Main {
 
     private static void PassFail(Scanner scanner) {
         System.out.println("Insert your theoretical grade");
-        int Tgrade = scanner.nextInt();
+        int T_grade = scanner.nextInt();
 
         System.out.println("Insert your practical grade");
-        int Pgrade = scanner.nextInt();
+        int P_grade = scanner.nextInt();
 
-        String result = (Tgrade * 0.7 + Pgrade * 0.3 > 10) ? "Passed" : "Failed";
+        String result = (T_grade * 0.7 + P_grade * 0.3 > 10) ? "Passed" : "Failed";
         System.out.println("You "+ result);
         scanner.nextLine();
     }
@@ -220,5 +222,125 @@ public class Main {
         }
 
         scanner.nextLine();
+    }
+
+    private static void Discography(Scanner scanner){
+
+        Discography discography = new Discography();
+        ArrayList<PlayList> playLists= new ArrayList<>();
+
+        boolean leave = false;
+
+        while(!leave){
+
+            System.out.println("-----Menu------");
+            System.out.println("1 - Create a playList");
+            System.out.println("2 - Add a Song to the playList");
+            System.out.println("3 - Delete a song from a playList");
+            System.out.println("4 - Show the playList");
+            System.out.println("5 - Show all playLists");
+            System.out.println("6 - Delete a playList");
+            System.out.println("7 - Play a playList");
+            System.out.println("8 - Show Discography");
+            System.out.println("9 - Leave");
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (option){
+                case 1 -> createPlayList(scanner,playLists);
+                case 2 -> addDiscoPlayList(scanner, playLists, discography);
+                case 3 -> System.out.println("3 - Delete a song from a playList");
+                case 4 -> showPlayList(scanner,playLists);
+                case 5 -> showPlayLists(scanner,playLists);
+                case 6 -> System.out.println("6 - Delete a playLis");
+                case 7 -> playPlayList(scanner,playLists);
+
+                case 8 -> discography.showDiscography();
+                case 9 -> {
+                    leave = true;
+                    System.out.println("Ty for listen to our music");
+                }
+
+                default -> System.out.println("Invalid choice. Chose a valid one.");
+            }
+        }
+        scanner.nextInt();
+    }
+    private static void createPlayList(Scanner scanner, ArrayList<PlayList> playLists){
+
+        System.out.print("Name of the Playlist: ");
+        String name = scanner.nextLine();
+
+        PlayList p = new PlayList(name);
+        playLists.add(p);
+        System.out.println("PlayList created: " + p.getId());
+
+    }
+    private static void showPlayLists(Scanner scanner, ArrayList<PlayList> playLists){
+
+        System.out.println("--------Play Lists--------");
+        for (PlayList pl : playLists){
+            System.out.println(pl.getId() +" - PlayList "+ pl.getName() + ":");
+        }
+        System.out.println("---------------------------");
+    }
+    private static void addDiscoPlayList(Scanner scanner, ArrayList<PlayList> playLists, Discography d){
+
+        d.showDiscography();
+
+        System.out.print("Songs's Id: ");
+        int discoId = scanner.nextInt();
+        scanner.nextLine();
+
+        showPlayLists(scanner,playLists);
+
+        System.out.print("PlayList's Id: ");
+        int playListId = scanner.nextInt();
+        scanner.nextLine();
+
+        PlayList pl = getPlById(playListId, playLists);
+        Disco disco = d.getDiscoById(discoId);
+
+        if(pl != null && disco!=null)
+            pl.addDisco(disco);
+        else
+            System.out.println("-Disco and Playlist doesn't exist-");
+
+
+    }
+    private static void showPlayList(Scanner scanner, ArrayList<PlayList> playLists){
+        showPlayLists(scanner,playLists);
+        System.out.print("PlayList's Id: ");
+        int playListId = scanner.nextInt();
+        scanner.nextLine();
+
+        PlayList pl = getPlById(playListId,playLists);
+        if (pl != null)
+            pl.showPlayList();
+    }
+    private static PlayList getPlById(int id, ArrayList<PlayList> playLists){
+
+        for (PlayList pl : playLists){
+            if(pl.getId() == id){
+                return pl;
+            }
+        }
+        return null;
+    }
+
+    private static void playPlayList(Scanner scanner, ArrayList<PlayList> playLists){
+        showPlayLists(scanner,playLists);
+
+        System.out.print("PlayList's Id: ");
+        int playListId = scanner.nextInt();
+        scanner.nextLine();
+
+        PlayList pl = getPlById(playListId,playLists);
+        if (pl != null)
+            pl.playPlayer(scanner);
+        else
+            System.out.print("PlayList doesn't exist");
+
+
     }
 }
