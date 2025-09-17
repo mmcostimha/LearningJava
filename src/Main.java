@@ -1,6 +1,12 @@
 
+import Discography.*;
+import AlarmClock.*;
 import java.io.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.Random;
 import java.io.FileReader;
@@ -12,7 +18,7 @@ public class Main {
         System.out.println("I'm alive!!!");
         int option = 0;
         Scanner scanner = new Scanner(System.in);
-        while (9 != option){
+        while (10 != option){
 
             //----Menu-----
             System.out.println("Make your choice:");
@@ -24,7 +30,8 @@ public class Main {
             System.out.println("6 - Rock Paper Scissors (1D and 2D Arrays)");
             System.out.println("7 - Write and Read File (Write and Read a file, try, catch and finally)");
             System.out.println("8 - Discography (Classes, Interface and ArrayList)");
-            System.out.println("9 - Leave");
+            System.out.println("9 - Shut down Timer(Threading)");
+            System.out.println("10 - Leave");
             option = scanner.nextInt();
             scanner.nextLine();
             switch (option){
@@ -44,15 +51,17 @@ public class Main {
                     Files(scanner);
                 case 8 ->
                     Discography(scanner);
-                case 9->
+                case 9 ->
+                    alarmClock(scanner);
+                case 10->
                     System.out.println("Bye");
                 default->
                     System.out.println("Unexpected value: " + option);
             }
+            System.out.println("Back to menu");
         }
        scanner.close();
     }
-
     public static void Hello(Scanner scanner){
 
         System.out.println("Insert the width: ");
@@ -69,7 +78,6 @@ public class Main {
         scanner.nextLine();
 
     }
-
     public  static void RollDice(Scanner scanner){
 
         Random random = new Random();
@@ -80,7 +88,6 @@ public class Main {
         scanner.nextLine();
 
     }
-
     public  static void Maths(Scanner scanner){
         System.out.println("See Math interactions ");
 
@@ -96,7 +103,6 @@ public class Main {
         scanner.nextLine();
 
     }
-
     public static void CompoundInterest(Scanner scanner){
 
         double principle;
@@ -121,7 +127,6 @@ public class Main {
 
 
     }
-
     private static void PassFail(Scanner scanner) {
         System.out.println("Insert your theoretical grade");
         int T_grade = scanner.nextInt();
@@ -133,7 +138,6 @@ public class Main {
         System.out.println("You "+ result);
         scanner.nextLine();
     }
-
     private static  void RockPaperScissors(Scanner scanner){
 
         Random random = new Random();
@@ -189,7 +193,6 @@ public class Main {
         System.out.println("Nice Game!!!");
         scanner.nextLine();
     }
-
     private static  void Files(Scanner scanner){
 
         //How to write a file using JAVA (4 popular options)
@@ -223,7 +226,6 @@ public class Main {
 
         scanner.nextLine();
     }
-
     private static void Discography(Scanner scanner){
 
         Discography discography = new Discography();
@@ -251,7 +253,7 @@ public class Main {
                 case 2 -> addDiscoPlayList(scanner, playLists, discography);
                 case 3 -> System.out.println("3 - Delete a song from a playList");
                 case 4 -> showPlayList(scanner,playLists);
-                case 5 -> showPlayLists(scanner,playLists);
+                case 5 -> showPlayLists(playLists);
                 case 6 -> System.out.println("6 - Delete a playLis");
                 case 7 -> playPlayList(scanner,playLists);
 
@@ -276,7 +278,7 @@ public class Main {
         System.out.println("PlayList created: " + p.getId());
 
     }
-    private static void showPlayLists(Scanner scanner, ArrayList<PlayList> playLists){
+    private static void showPlayLists(ArrayList<PlayList> playLists){
 
         System.out.println("--------Play Lists--------");
         for (PlayList pl : playLists){
@@ -292,7 +294,7 @@ public class Main {
         int discoId = scanner.nextInt();
         scanner.nextLine();
 
-        showPlayLists(scanner,playLists);
+        showPlayLists(playLists);
 
         System.out.print("PlayList's Id: ");
         int playListId = scanner.nextInt();
@@ -309,7 +311,7 @@ public class Main {
 
     }
     private static void showPlayList(Scanner scanner, ArrayList<PlayList> playLists){
-        showPlayLists(scanner,playLists);
+        showPlayLists(playLists);
         System.out.print("PlayList's Id: ");
         int playListId = scanner.nextInt();
         scanner.nextLine();
@@ -327,9 +329,8 @@ public class Main {
         }
         return null;
     }
-
     private static void playPlayList(Scanner scanner, ArrayList<PlayList> playLists){
-        showPlayLists(scanner,playLists);
+        showPlayLists(playLists);
 
         System.out.print("PlayList's Id: ");
         int playListId = scanner.nextInt();
@@ -340,7 +341,30 @@ public class Main {
             pl.playPlayer(scanner);
         else
             System.out.print("PlayList doesn't exist");
+    }
 
+    private  static void alarmClock(Scanner scanner){
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalTime alarmTime = null;
+
+        // Get alarm clock time
+        while (alarmTime == null){
+
+            try{
+                System.out.println("Enter an alarm time (HH:mm:ss)");
+                String inputTime = scanner.nextLine();
+                alarmTime = LocalTime.parse(inputTime,formatter);
+                System.out.println("Alarm set for " + alarmTime);
+            }
+            catch (DateTimeParseException e){
+                System.out.println("Invalid format.");
+
+            }
+        }
+
+        AlarmClock alarmClock = new AlarmClock(alarmTime);
+        Thread alarmThread = new Thread(alarmClock);
+        alarmThread.start();
     }
 }
